@@ -4,131 +4,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistemma de impuestos a las actvididades economicas</title>
+    <title>Sistema de impuestos a las actividades economicas</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
 </head>
 
-<body class="container-fluid">
+<body>
     <div class="container-fluid">
-
         <div class="row">
-
             <div class="col-6">
-                <!--Aqui va el formulario-->
-                <div class="container text-center">
-
-                    <div class="row">
-
-                        <div class="col">
-
-                            <input placeholder="codigo" name="txtCodigoCliente" id="txtCodigoCliente"
-                                class="form-control" type="text">
-
+                <form id="frmCliente">
+                    <div class="container text-center">
+                        <div class="row">
+                            <div class="col">
+                                <input pattern="^[0-9]{3,10}$" required placeholder="Codigo" name="txtCodigoCliente" id="txtCodigoCliente"
+                                    class="form-control" type="text">
+                            </div>
                         </div>
-
-
-                    </div>
-
-                    <div class="row">
-
-                        <div class="col">
-
-                            <input placeholder="nombre" name="txtNombreCliente" id="txtNombreCliente"
-                                class="form-control" type="text">
-
+                        <div class="row">
+                            <div class="col">
+                                <input pattern="^[A-Za-záéíóúÁÉÍÓÚñÑ ]{3,}$" required placeholder="Nombre" name="txtNombreCliente" id="txtNombreCliente"
+                                    class="form-control" type="text">
+                            </div>
                         </div>
-
-
-                    </div>
-
-                    <div class="row">
-
-                        <div class="col">
-
-                            <input placeholder="direccion" name="txtDireccionCliente" id="txtDireccionCliente"
-                                class="form-control" type="text">
-
+                        <div class="row">
+                            <div class="col">
+                                <input placeholder="Direccion" name="txtDireccionCliente" id="txtDireccionCliente"
+                                    class="form-control" type="text">
+                            </div>
                         </div>
-
-
-                    </div>
-
-                    <div class="row">
-
-                        <div class="col">
-
-                            <input placeholder="telefono" name="txtTelefonoCliente" id="txtTelefonoCliente"
-                                class="form-control" type="text">
-
+                        <div class="row">
+                            <div class="col">
+                                <input pattern="^[0-9]{4}-[0-9]{4}$" placeholder="Telefono" name="txtTelefonoCliente" id="txtTelefonoCliente"
+                                    class="form-control" type="text">
+                            </div>
                         </div>
-
-
-                    </div>
-
-                    <div class="row">
-
-                        <div class="col">
-
-                            <input placeholder="email" name="txtEmailCliente" id="txtEmailCliente" class="form-control"
-                                type="text">
-
+                        <div class="row">
+                            <div class="col">
+                                <input placeholder="Email" name="txtEmailCliente" id="txtEmailCliente" class="form-control"
+                                    type="email">
+                            </div>
                         </div>
-
-
-                    </div>
-
-                    <div class="row">
-
-                        <div class="col">
-
-                            <select name="cboTipoPersona" id="cboTipoPersona" class="form-control">
-                                <option value="particular">Particular</option>
-                                <option value="empresa">Empresa</option>
-                            </select>
-
+                        <div class="row">
+                            <div class="col">
+                                <select class="form-control" name="cboTipoPersona" id="cboTipoPersona">
+                                    <option value="particular">Particular</option>
+                                    <option value="empresa">Empresa</option>
+                                </select>
+                            </div>
                         </div>
-
-                    </div>
-
-                    <div class="row">
-
-                        <div class="col">
-
-                            <input type="button" value="Guardar" class="btn btn-primary">
-                            <input type="button" value="Limpiar" class="btn btn-warning">
-                            <input type="button" value="Buscar" class="btn btn-secondary">
-
+                        <div class="row">
+                            <div class="col">
+                                <input type="submit" value="Guardar" class="btn btn-primary">
+                                <input type="button" value="Buscar" class="btn btn-secondary">
+                                <input type="reset" value="Limpiar" class="btn btn-warning">
+                            </div>
                         </div>
-
-
                     </div>
-
-
-                </div>
-
+                </form>
+            </div>
+            <div class="col-6">
 
             </div>
-
-            <div class="col-6">
-                <!--Aqui va la tabla-->
-
-            </div>
-
-
         </div>
-
     </div>
-
-
-
-
-
 </body>
-
-
-
 <script>
-
+    var accion='nuevo',
+        idCliente = '';
+    
+    frmCliente.addEventListener('submit',(e)=>{
+        e.preventDefault();
+        guardarClientes();
+        
+    });
+    frmCliente.addEventListener('reset',(e)=>{
+        e.preventDefault();
+        limpiarFormulario();
+    });
+    
+    async function guardarClientes(){
+        let datos = {
+            codigo: txtCodigoCliente.value,
+            nombre: txtNombreCliente.value,
+            direccion: txtDireccionCliente.value,
+            telefono: txtTelefonoCliente.value,
+            email: txtEmailCliente.value,
+            tipo: cboTipoPersona.value,
+            accion,
+            idCliente
+        };
+        let response = await fetch('/cliente',{
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify(datos)
+        }), respuesta = response.json();
+        if(respuesta.msg!="ok"){
+            alert("Error: "+ respuesta.msg);
+            return;
+        }
+        limpiarFormulario();
+    }
+    function limpiarFormulario(){
+        accion = 'nuevo';
+        idCliente = '';
+        txtCodigoCliente.value = '';
+        txtNombreCliente.value = '';
+        txtDireccionCliente.value = '';
+        txtTelefonoCliente.value = '';
+        txtEmailCliente.value = '';
+        cboTipoPersona.value = 'particular';
+    }
 </script>
 
 </html>
