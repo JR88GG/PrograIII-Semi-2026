@@ -55,7 +55,7 @@
                         <div class="row">
                             <div class="col">
                                 <input type="submit" value="Guardar" class="btn btn-primary">
-                                <input type="button" value="Buscar" class="btn btn-secondary">
+                                <input type="button" value="Buscar" class="btn btn-secondary" onclick="buscarPorNombre()">
                                 <input type="reset" value="Limpiar" class="btn btn-warning">
                             </div>
                         </div>
@@ -63,7 +63,191 @@
                 </form>
             </div>
             <div class="col-6">
+                <div class="input-group mb-2">
+                    <span class="input-group-text">Buscar</span>
+                    <input type="search" placeholder="Filtrar clientes por nombre..." name="txtBuscarCliente" id="txtBuscarCliente"
+                        class="form-control" autocomplete="off">
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-sm table-striped" id="tblClientes">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Nombre</th>
+                                <th>Dirección</th>
+                                <th>Teléfono</th>
+                                <th>Email</th>
+                                <th>Tipo</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyClientes"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-6">
+                <form id="frmPeriodo" novalidate>
+                    <div class="container text-center">
+                        <div class="row mb-1">
+                            <div class="col">
+                                <h5>Impuesto a las Actividades Económicas</h5>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col">
+                                <select class="form-control" name="cboEmpresaPeriodo" id="cboEmpresaPeriodo">
+                                    <option value="">Seleccione una empresa</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col">
+                                <select class="form-control" name="cboProductoPeriodo" id="cboProductoPeriodo">
+                                    <option value="">Seleccione el producto (Comercio o Industria)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col">
+                                <div class="input-group">
+                                    <span class="input-group-text">Desde</span>
+                                    <input name="txtDesdePeriodo" id="txtDesdePeriodo" class="form-control" type="date">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="input-group">
+                                    <span class="input-group-text">Hasta</span>
+                                    <input name="txtHastaPeriodo" id="txtHastaPeriodo" class="form-control" type="date">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col">
+                                <input min="0.01" step="0.01" placeholder="Balance o activo" name="txtMontoPeriodo" id="txtMontoPeriodo"
+                                    class="form-control" type="number">
+                            </div>
+                            <div class="col">
+                                <input min="0.01" step="0.01" value="1.00" placeholder="Cantidad" name="txtCantidadPeriodo" id="txtCantidadPeriodo"
+                                    class="form-control" type="number">
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col text-start">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="chkCerrarVigente">
+                                    <label class="form-check-label" for="chkCerrarVigente">
+                                        Cerrar el período vigente (el balance cambió)
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col">
+                                <input type="submit" value="Guardar período" class="btn btn-primary">
+                                <input type="reset" value="Limpiar" class="btn btn-warning">
+                            </div>
+                        </div>
+                    </div>
+                </form>
 
+                <div id="divDetallePeriodo" class="mt-2"></div>
+
+                <div class="border rounded p-2 mt-2">
+                    <div class="container text-center">
+                        <div class="row mb-1">
+                            <div class="col">
+                                <h6>Cargo para recibo</h6>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col">
+                                <div class="input-group">
+                                    <span class="input-group-text">Desde</span>
+                                    <input name="txtCobroDesde" id="txtCobroDesde" class="form-control" type="date">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="input-group">
+                                    <span class="input-group-text">Hasta</span>
+                                    <input name="txtCobroHasta" id="txtCobroHasta" class="form-control" type="date">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col">
+                                <input type="button" value="Calcular cargo" class="btn btn-secondary" onclick="calcularCargo()">
+                                <input type="button" value="Generar recibo" class="btn btn-success" onclick="generarRecibo()">
+                            </div>
+                        </div>
+                    </div>
+                    <div id="divCargo"></div>
+                </div>
+
+            </div>
+            <div class="col-6">
+                <div id="divResumenPeriodos" class="mt-2"></div>
+                <div class="table-responsive">
+                    <table class="table table-sm table-striped" id="tblPeriodos">
+                        <thead>
+                            <tr>
+                                <th>Desde</th>
+                                <th>Hasta</th>
+                                <th>Balance</th>
+                                <th>Código</th>
+                                <th>Precio</th>
+                                <th>Estado</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyPeriodos"></tbody>
+                    </table>
+                </div>
+
+                <form id="frmCorreccion" class="d-none border rounded p-2 mt-2" novalidate>
+                    <div class="container text-center">
+                        <div class="row mb-1">
+                            <div class="col">
+                                <h6>Corrección autorizada de período facturado</h6>
+                                <div id="divCorreccionPeriodo" class="small text-muted"></div>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col">
+                                <input min="0.01" step="0.01" placeholder="Nuevo balance" name="txtCorreccionMonto" id="txtCorreccionMonto"
+                                    class="form-control" type="number">
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col">
+                                <input placeholder="Motivo de la corrección" name="txtCorreccionMotivo" id="txtCorreccionMotivo"
+                                    class="form-control" type="text">
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col">
+                                <input placeholder="Usuario autorizador" name="txtCorreccionUsuario" id="txtCorreccionUsuario"
+                                    class="form-control" type="text" autocomplete="off">
+                            </div>
+                            <div class="col">
+                                <input placeholder="Clave" name="txtCorreccionClave" id="txtCorreccionClave"
+                                    class="form-control" type="password" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col">
+                                <input type="submit" value="Corregir" class="btn btn-danger">
+                                <input type="button" value="Cancelar" class="btn btn-secondary" onclick="cerrarCorreccion()">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <div id="divRecibos" class="mt-2"></div>
+
+                <div id="divBitacora" class="mt-2"></div>
             </div>
         </div>
     </div>
@@ -99,12 +283,14 @@
                 'Content-Type':'application/json'
             },
             body:JSON.stringify(datos)
-        }), respuesta = response.json();
+        });
+        let respuesta = await response.json();
         if(respuesta.msg!="ok"){
             alert("Error: "+ respuesta.msg);
             return;
         }
         limpiarFormulario();
+        cargarEmpresas();
     }
     function limpiarFormulario(){
         accion = 'nuevo';
@@ -115,7 +301,568 @@
         txtTelefonoCliente.value = '';
         txtEmailCliente.value = '';
         cboTipoPersona.value = 'particular';
+        buscarClientes();
     }
+
+    /* ===== Tabla de clientes (buscar, modificar, eliminar) ===== */
+    var clientesCargados = [];
+
+    var temporizadorClientes = null;
+
+    // Filtra por el texto de la barra de búsqueda; vacío = todos los clientes
+    async function buscarClientes(){
+        let response = await fetch(`/clientes?buscar=${encodeURIComponent(txtBuscarCliente.value.trim())}`),
+            clientes = await response.json();
+        clientesCargados = clientes || [];
+        if(!clientesCargados.length){
+            tbodyClientes.innerHTML = '<tr><td colspan="7" class="text-center text-muted">No se encontraron clientes</td></tr>';
+            return;
+        }
+        tbodyClientes.innerHTML = clientesCargados.map(c=>`
+            <tr>
+                <td>${esc(c.codigo)}</td>
+                <td>${esc(c.nombre)}</td>
+                <td>${esc(c.direccion)}</td>
+                <td>${esc(c.telefono)}</td>
+                <td>${esc(c.email)}</td>
+                <td><span class="badge text-bg-${c.tipo == 'empresa' ? 'primary' : 'secondary'}">${esc(c.tipo)}</span></td>
+                <td>
+                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="modificarCliente(${Number(c.idCliente)})">Modificar</button>
+                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="eliminarCliente(${Number(c.idCliente)})">Eliminar</button>
+                </td>
+            </tr>`).join('');
+    }
+    // Filtrado mientras se escribe (espera 250 ms tras la última tecla)
+    txtBuscarCliente.addEventListener('input',()=>{
+        clearTimeout(temporizadorClientes);
+        temporizadorClientes = setTimeout(buscarClientes, 250);
+    });
+    // Botón Buscar del formulario: busca con el nombre que se escribió allí
+    function buscarPorNombre(){
+        txtBuscarCliente.value = txtNombreCliente.value.trim();
+        buscarClientes();
+    }
+    function modificarCliente(id){
+        let c = clientesCargados.find(x=>x.idCliente == id);
+        if(!c) return;
+        accion = 'modificar';
+        idCliente = c.idCliente;
+        txtCodigoCliente.value = c.codigo;
+        txtNombreCliente.value = c.nombre;
+        txtDireccionCliente.value = c.direccion;
+        txtTelefonoCliente.value = c.telefono;
+        txtEmailCliente.value = c.email;
+        cboTipoPersona.value = c.tipo;
+        txtCodigoCliente.focus();
+    }
+    async function eliminarCliente(id){
+        let c = clientesCargados.find(x=>x.idCliente == id);
+        if(!c) return;
+        if(!confirm(`¿Eliminar al cliente ${c.nombre}?`)) return;
+        let response = await fetch('/cliente',{
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({accion:'eliminar', idCliente:c.idCliente})
+        });
+        let respuesta = await response.json();
+        if(respuesta.msg!="ok"){
+            alert("Error: "+ respuesta.msg);
+            return;
+        }
+        if(idCliente == c.idCliente) limpiarFormulario(); else buscarClientes();
+        await cargarEmpresas();
+        if(!cboEmpresaPeriodo.value) listarPeriodos();
+    }
+
+    /* ===== Impuesto a las Actividades Económicas ===== */
+    var periodosCargados = [],
+        temporizador = null,
+        consecutivo = 0;
+
+    frmPeriodo.addEventListener('submit',(e)=>{
+        e.preventDefault();
+        guardarPeriodo();
+    });
+    frmPeriodo.addEventListener('reset',(e)=>{
+        e.preventDefault();
+        limpiarPeriodo();
+    });
+
+    // RF 17, 19 y 20: cualquier cambio recalcula de inmediato con los datos actuales
+    [cboEmpresaPeriodo, cboProductoPeriodo, txtDesdePeriodo, txtHastaPeriodo, txtMontoPeriodo, txtCantidadPeriodo, chkCerrarVigente].forEach(campo=>{
+        campo.addEventListener('input', programarCalculo);
+        campo.addEventListener('change', programarCalculo);
+    });
+    [cboEmpresaPeriodo, cboProductoPeriodo].forEach(campo=>{
+        campo.addEventListener('change', listarPeriodos);
+    });
+    txtDesdePeriodo.addEventListener('change',()=>{
+        // Sugiere un período anual, el usuario puede cambiar la fecha Hasta
+        if(txtDesdePeriodo.value && (!txtHastaPeriodo.value || txtHastaPeriodo.value <= txtDesdePeriodo.value)){
+            let [a,m,d] = txtDesdePeriodo.value.split('-').map(Number);
+            txtHastaPeriodo.value = new Date(Date.UTC(a+1, m-1, d)).toISOString().slice(0,10);
+            programarCalculo();
+        }
+    });
+
+    function esc(texto){
+        return String(texto ?? '').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+    function moneda(valor){
+        return '$' + Number(valor).toLocaleString('en-US',{minimumFractionDigits:2, maximumFractionDigits:2});
+    }
+    function fecha(texto){
+        let [a,m,d] = String(texto).split('-');
+        return `${d}/${m}/${a}`;
+    }
+    function datosPeriodo(accionPeriodo, extra = {}){
+        return {
+            accion: accionPeriodo,
+            idCliente: cboEmpresaPeriodo.value,
+            idProducto: cboProductoPeriodo.value,
+            desde: txtDesdePeriodo.value,
+            hasta: txtHastaPeriodo.value,
+            monto: txtMontoPeriodo.value,
+            cantidad: txtCantidadPeriodo.value,
+            ...extra
+        };
+    }
+    async function enviarPeriodo(datos){
+        let response = await fetch('/periodo',{
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify(datos)
+        });
+        return await response.json();
+    }
+
+    async function cargarEmpresas(){
+        let response = await fetch('/clientes?buscar='),
+            clientes = await response.json(),
+            seleccionada = cboEmpresaPeriodo.value;
+        cboEmpresaPeriodo.innerHTML = '<option value="">Seleccione una empresa</option>' +
+            (clientes || []).filter(c=>c.tipo=='empresa')
+                .map(c=>`<option value="${esc(c.idCliente)}">${esc(c.codigo)} - ${esc(c.nombre)}</option>`).join('');
+        cboEmpresaPeriodo.value = seleccionada;
+    }
+    async function cargarProductos(){
+        let response = await fetch('/productos'),
+            productos = await response.json();
+        cboProductoPeriodo.innerHTML = '<option value="">Seleccione el producto (Comercio o Industria)</option>' +
+            (productos || []).map(p=>`<option value="${esc(p.idProducto)}">${esc(p.codigo)} - ${esc(p.nombre)}</option>`).join('');
+    }
+
+    function programarCalculo(){
+        clearTimeout(temporizador);
+        temporizador = setTimeout(calcularPeriodo, 300);
+    }
+    async function calcularPeriodo(){
+        let id = ++consecutivo;
+        if(!cboEmpresaPeriodo.value || !cboProductoPeriodo.value || !txtDesdePeriodo.value || !txtHastaPeriodo.value || !txtMontoPeriodo.value){
+            divDetallePeriodo.innerHTML = '<div class="alert alert-secondary mb-0">Complete empresa, producto, fechas y balance para calcular el impuesto.</div>';
+            return;
+        }
+        try{
+            let respuesta = await enviarPeriodo(datosPeriodo('calcular'));
+            if(id !== consecutivo) return; // llegó una respuesta más nueva
+            mostrarCalculo(respuesta);
+        }catch(e){
+            divDetallePeriodo.innerHTML = '<div class="alert alert-danger mb-0">No se pudo conectar con el servidor.</div>';
+        }
+    }
+
+    function conflictosHtml(conflictos){
+        if(!conflictos || !conflictos.length) return '';
+        let items = conflictos.map(p=>`<li>${fecha(p.desde)} a ${fecha(p.hasta)} · Balance ${moneda(p.monto)} · Precio ${moneda(p.precio)}</li>`).join('');
+        if(chkCerrarVigente.checked){
+            return `<div class="alert alert-info">Al guardar se cerrará el período existente en la fecha Desde indicada (no se sobrescribe):<ul class="mb-0">${items}</ul></div>`;
+        }
+        return `<div class="alert alert-danger">El período indicado se superpone con un período existente.<ul class="mb-1">${items}</ul>
+                Si el balance cambió, marque "Cerrar el período vigente" para crear uno nuevo conservando el anterior.</div>`;
+    }
+    // RF 18: detalle visible del cálculo
+    function mostrarCalculo(r){
+        if(r.msg != 'ok'){
+            divDetallePeriodo.innerHTML = `<div class="alert alert-danger mb-0">${esc(r.msg)}</div>`;
+            return;
+        }
+        let c = r.calculo,
+            bloques = c.bloques === null ? 'No aplica (tarifa porcentual)' : c.bloques;
+        let html = `
+            <table class="table table-sm table-bordered text-start mb-2">
+                <tbody>
+                    <tr><th>Balance</th><td>${moneda(c.balance)}</td></tr>
+                    <tr><th>Rango aplicado</th><td>${moneda(c.rango_desde)} a ${moneda(c.rango_hasta)}</td></tr>
+                    <tr><th>Precio base</th><td>${moneda(c.precio_base)}</td></tr>
+                    <tr><th>Excedente</th><td>${moneda(c.excedente)}</td></tr>
+                    <tr><th>Bloques</th><td>${esc(bloques)}</td></tr>
+                    <tr><th>Adicional</th><td>${moneda(c.adicional)}</td></tr>
+                    <tr><th>Porcentaje</th><td>${Number(c.porcentaje)} %</td></tr>
+                    <tr class="table-primary"><th>Impuesto mensual</th><td><strong>${moneda(c.precio)}</strong></td></tr>
+                    <tr><th>Subtotal (cantidad x precio)</th><td>${moneda(c.subtotal)}</td></tr>
+                    <tr><th>Fórmula</th><td><small>${esc(c.formula)}</small></td></tr>
+                    <tr><th>Versión</th><td><small>${esc(c.version_formula)} · tarifa v${esc(c.tarifa_version)}</small></td></tr>
+                </tbody>
+            </table>`;
+        (r.advertencias || []).forEach(a=>{
+            html += `<div class="alert alert-warning">${esc(a)}</div>`;
+        });
+        html += conflictosHtml(r.conflictos);
+        divDetallePeriodo.innerHTML = html;
+    }
+
+    async function guardarPeriodo(){
+        let respuesta;
+        try{
+            respuesta = await enviarPeriodo(datosPeriodo('calcular'));
+        }catch(e){
+            alert('No se pudo conectar con el servidor.');
+            return;
+        }
+        mostrarCalculo(respuesta);
+        if(respuesta.msg != 'ok'){
+            alert(respuesta.msg);
+            return;
+        }
+        let c = respuesta.calculo,
+            conflictos = respuesta.conflictos || [],
+            advertencias = respuesta.advertencias || [];
+        if(conflictos.length && !chkCerrarVigente.checked){
+            alert('El período indicado se superpone con un período existente.\nSi el balance cambió, marque "Cerrar el período vigente".');
+            return;
+        }
+        // Paso 7 del flujo: confirmación antes de guardar
+        let texto = `¿Guardar el período?\n\n` +
+            `Empresa: ${cboEmpresaPeriodo.selectedOptions[0].text}\n` +
+            `Producto: ${cboProductoPeriodo.selectedOptions[0].text}\n` +
+            `Período: ${fecha(c.desde)} a ${fecha(c.hasta)} (Hasta no incluida)\n` +
+            `Balance: ${moneda(c.balance)}\n` +
+            `Impuesto mensual: ${moneda(c.precio)}`;
+        if(conflictos.length){
+            texto += `\n\nSe cerrará el período vigente el ${fecha(c.desde)}.`;
+        }
+        if(advertencias.length){
+            texto += `\n\nAdvertencia: ${advertencias.join(' ')}`;
+        }
+        if(!confirm(texto)) return;
+
+        let guardado = await enviarPeriodo(datosPeriodo('nuevo', {
+            confirmado: true,
+            cerrar_vigente: chkCerrarVigente.checked
+        }));
+        if(guardado.msg != 'ok'){
+            alert('Error: ' + guardado.msg);
+            return;
+        }
+        // Conserva empresa y producto para ver el historial actualizado
+        txtDesdePeriodo.value = '';
+        txtHastaPeriodo.value = '';
+        txtMontoPeriodo.value = '';
+        txtCantidadPeriodo.value = '1.00';
+        chkCerrarVigente.checked = false;
+        divDetallePeriodo.innerHTML = '<div class="alert alert-success mb-0">Período guardado correctamente.</div>';
+        listarPeriodos();
+    }
+    function limpiarPeriodo(){
+        consecutivo++;
+        cboEmpresaPeriodo.value = '';
+        cboProductoPeriodo.value = '';
+        txtDesdePeriodo.value = '';
+        txtHastaPeriodo.value = '';
+        txtMontoPeriodo.value = '';
+        txtCantidadPeriodo.value = '1.00';
+        chkCerrarVigente.checked = false;
+        txtCobroDesde.value = '';
+        txtCobroHasta.value = '';
+        divDetallePeriodo.innerHTML = '';
+        divBitacora.innerHTML = '';
+        listarPeriodos();
+    }
+
+    async function listarPeriodos(){
+        divBitacora.innerHTML = '';
+        divCargo.innerHTML = '';
+        cerrarCorreccion();
+        if(!cboEmpresaPeriodo.value){
+            periodosCargados = [];
+            tbodyPeriodos.innerHTML = '';
+            divResumenPeriodos.innerHTML = '';
+            divRecibos.innerHTML = '';
+            return;
+        }
+        listarRecibos();
+        let response = await fetch(`/periodos?idCliente=${encodeURIComponent(cboEmpresaPeriodo.value)}&idProducto=${encodeURIComponent(cboProductoPeriodo.value)}`),
+            datos = await response.json();
+        periodosCargados = datos.periodos || [];
+
+        // RF 21: la mensualidad vigente se muestra separada del total referencial
+        divResumenPeriodos.innerHTML = `
+            <div class="alert alert-light border mb-2">
+                <div><strong>Impuesto mensual vigente:</strong> ${datos.impuesto_vigente === null ? 'Sin período vigente' : moneda(datos.impuesto_vigente)}</div>
+                <div><small class="text-muted">Total referencial de períodos registrados: ${moneda(datos.total_referencial)}
+                (solo administrativo, no es una mensualidad ni se cobra cada mes)</small></div>
+            </div>`;
+
+        if(!periodosCargados.length){
+            tbodyPeriodos.innerHTML = '<tr><td colspan="7" class="text-center text-muted">No hay períodos registrados</td></tr>';
+            return;
+        }
+        let colores = {'Vigente':'success', 'Histórico':'secondary', 'Futuro':'info'};
+        tbodyPeriodos.innerHTML = periodosCargados.map(p=>`
+            <tr>
+                <td>${fecha(p.desde)}</td>
+                <td>${fecha(p.hasta)}</td>
+                <td>${moneda(p.monto)}</td>
+                <td>${esc(p.codigo)}</td>
+                <td>${moneda(p.precio)}</td>
+                <td>
+                    <span class="badge text-bg-${colores[p.estado] || 'secondary'}">${esc(p.estado)}</span>
+                    ${p.facturado == 1 ? '<span class="badge text-bg-dark">Facturado</span>' : ''}
+                </td>
+                <td>
+                    ${p.facturado == 1
+                        ? `<button type="button" class="btn btn-sm btn-outline-danger" onclick="abrirCorreccion(${Number(p.idPeriodo)})">Corregir</button>`
+                        : `<button type="button" class="btn btn-sm btn-outline-primary" onclick="recalcularPeriodo(${Number(p.idPeriodo)})">Recalcular</button>`}
+                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="verBitacora(${Number(p.idPeriodo)})">Bitácora</button>
+                </td>
+            </tr>`).join('');
+    }
+
+    // Solo períodos NO facturados (RF 09); el servidor también lo valida
+    async function recalcularPeriodo(idPeriodo){
+        let p = periodosCargados.find(x=>x.idPeriodo == idPeriodo);
+        if(!p) return;
+        let nuevo = prompt(`Nuevo balance para el período ${fecha(p.desde)} a ${fecha(p.hasta)}:`, Number(p.monto).toFixed(2));
+        if(nuevo === null) return;
+        if(!confirm(`El precio guardado (${moneda(p.precio)}) será reemplazado por el resultado de la fórmula vigente.\nEl cambio quedará registrado en la bitácora.\n\n¿Desea continuar?`)) return;
+        let respuesta = await enviarPeriodo({
+            accion: 'recalcular',
+            idPeriodo,
+            monto: nuevo,
+            confirmado: true,
+            motivo: 'Recálculo solicitado desde la pantalla'
+        });
+        if(respuesta.msg != 'ok'){
+            alert('Error: ' + respuesta.msg);
+            return;
+        }
+        listarPeriodos();
+    }
+
+    async function verBitacora(idPeriodo){
+        let response = await fetch(`/periodos/bitacora?idPeriodo=${encodeURIComponent(idPeriodo)}`),
+            filas = await response.json();
+        if(!filas || !filas.length){
+            divBitacora.innerHTML = '<div class="alert alert-secondary mb-0">Este período no tiene registros en la bitácora.</div>';
+            return;
+        }
+        let cambio = (antes, despues)=> (antes === null ? '' : moneda(antes) + ' → ') + (despues === null ? '' : moneda(despues));
+        divBitacora.innerHTML = `
+            <h6>Bitácora del período</h6>
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered">
+                    <thead>
+                        <tr><th>Fecha</th><th>Acción</th><th>Balance</th><th>Precio</th><th>Motivo</th><th>Usuario</th></tr>
+                    </thead>
+                    <tbody>
+                        ${filas.map(f=>`
+                            <tr>
+                                <td>${esc(f.fecha)}</td>
+                                <td>${esc(f.accion)}</td>
+                                <td>${cambio(f.monto_anterior, f.monto_nuevo)}</td>
+                                <td>${cambio(f.precio_anterior, f.precio_nuevo)}</td>
+                                <td><small>${esc(f.motivo)}</small></td>
+                                <td>${esc(f.usuario)}</td>
+                            </tr>`).join('')}
+                    </tbody>
+                </table>
+            </div>`;
+    }
+
+    /* ===== Corrección autorizada de períodos facturados (RF 16) ===== */
+    var idPeriodoCorreccion = null;
+
+    frmCorreccion.addEventListener('submit',(e)=>{
+        e.preventDefault();
+        corregirPeriodo();
+    });
+
+    function abrirCorreccion(idPeriodo){
+        let p = periodosCargados.find(x=>x.idPeriodo == idPeriodo);
+        if(!p) return;
+        idPeriodoCorreccion = idPeriodo;
+        divCorreccionPeriodo.textContent = `Período ${fecha(p.desde)} a ${fecha(p.hasta)} · Balance actual ${moneda(p.monto)} · Precio actual ${moneda(p.precio)}`;
+        txtCorreccionMonto.value = Number(p.monto).toFixed(2);
+        txtCorreccionMotivo.value = '';
+        txtCorreccionUsuario.value = '';
+        txtCorreccionClave.value = '';
+        frmCorreccion.classList.remove('d-none');
+        frmCorreccion.scrollIntoView({behavior:'smooth', block:'center'});
+    }
+    function cerrarCorreccion(){
+        idPeriodoCorreccion = null;
+        frmCorreccion.classList.add('d-none');
+        txtCorreccionClave.value = '';
+    }
+    async function corregirPeriodo(){
+        let p = periodosCargados.find(x=>x.idPeriodo == idPeriodoCorreccion);
+        if(!p) return;
+        if(!confirm(`Se corregirá un período YA FACTURADO.\n\nBalance: ${moneda(p.monto)} → ${moneda(txtCorreccionMonto.value || 0)}\n\nLos recibos ya emitidos conservarán su importe original.\nLa corrección quedará registrada en la bitácora.\n\n¿Desea continuar?`)) return;
+        let respuesta = await enviarPeriodo({
+            accion: 'corregir',
+            idPeriodo: idPeriodoCorreccion,
+            monto: txtCorreccionMonto.value,
+            motivo: txtCorreccionMotivo.value,
+            autorizador: txtCorreccionUsuario.value,
+            clave: txtCorreccionClave.value,
+            confirmado: true
+        });
+        if(respuesta.msg != 'ok'){
+            alert('Error: ' + respuesta.msg);
+            return;
+        }
+        cerrarCorreccion();
+        listarPeriodos();
+    }
+
+    /* ===== Cargo y recibos (sección 15) ===== */
+    [txtCobroDesde, txtCobroHasta].forEach(campo=>{
+        campo.addEventListener('change', ()=>{
+            if(txtCobroDesde.value && txtCobroHasta.value) calcularCargo();
+        });
+    });
+
+    function datosCobro(accionCobro, extra = {}){
+        return {
+            accion: accionCobro,
+            idCliente: cboEmpresaPeriodo.value,
+            idProducto: cboProductoPeriodo.value,
+            cobro_desde: txtCobroDesde.value,
+            cobro_hasta: txtCobroHasta.value,
+            ...extra
+        };
+    }
+    async function enviarRecibo(datos){
+        let response = await fetch('/recibo',{
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify(datos)
+        });
+        return await response.json();
+    }
+
+    function recibosExistentesHtml(conflictos){
+        if(!conflictos || !conflictos.length) return '';
+        let items = conflictos.map(r=>`<li>Recibo #${Number(r.idRecibo)} · ${fecha(r.cobro_desde)} a ${fecha(r.cobro_hasta)} · ${moneda(r.total)}</li>`).join('');
+        return `<div class="alert alert-danger mt-2 mb-0">Ya existe un recibo que cubre parte del rango indicado.<ul class="mb-0">${items}</ul></div>`;
+    }
+    function mostrarCargo(r){
+        if(r.msg != 'ok'){
+            divCargo.innerHTML = `<div class="alert alert-danger mt-2 mb-0">${esc(r.msg)}</div>` + recibosExistentesHtml(r.conflictos);
+            return;
+        }
+        let filas = r.lineas.map(l=>`
+            <tr>
+                <td>${fecha(l.desde)} a ${fecha(l.hasta)}</td>
+                <td>${Number(l.meses)}</td>
+                <td>${Number(l.cantidad).toFixed(2)}</td>
+                <td>${moneda(l.precio)}</td>
+                <td>${moneda(l.importe)}</td>
+            </tr>`).join('');
+        let html = `
+            <div class="table-responsive mt-2">
+                <table class="table table-sm table-bordered mb-1">
+                    <thead>
+                        <tr><th>Período aplicado</th><th>Meses</th><th>Cantidad</th><th>Precio mensual</th><th>Importe</th></tr>
+                    </thead>
+                    <tbody>${filas}</tbody>
+                    <tfoot>
+                        <tr class="table-primary"><th colspan="4">Total del recibo</th><th>${moneda(r.total)}</th></tr>
+                    </tfoot>
+                </table>
+            </div>
+            <small class="text-muted">Cargo del período = Cantidad x Precio mensual x Meses aplicables</small>`;
+        (r.advertencias || []).forEach(a=>{
+            html += `<div class="alert alert-warning mt-2 mb-0">${esc(a)}</div>`;
+        });
+        html += recibosExistentesHtml(r.conflictos);
+        divCargo.innerHTML = html;
+    }
+    async function calcularCargo(){
+        try{
+            mostrarCargo(await enviarRecibo(datosCobro('cargo')));
+        }catch(e){
+            divCargo.innerHTML = '<div class="alert alert-danger mt-2 mb-0">No se pudo conectar con el servidor.</div>';
+        }
+    }
+    async function generarRecibo(){
+        let r = await enviarRecibo(datosCobro('cargo'));
+        mostrarCargo(r);
+        if(r.msg != 'ok'){
+            alert(r.msg);
+            return;
+        }
+        if(r.conflictos.length){
+            alert('Ya existe un recibo que cubre parte del rango indicado.');
+            return;
+        }
+        let texto = `¿Generar el recibo?\n\n` +
+            `Empresa: ${cboEmpresaPeriodo.selectedOptions[0].text}\n` +
+            `Producto: ${cboProductoPeriodo.selectedOptions[0].text}\n` +
+            `Cobro: ${fecha(r.cobro_desde)} a ${fecha(r.cobro_hasta)} (Hasta no incluida)\n` +
+            `Total: ${moneda(r.total)}\n\n` +
+            `Los períodos usados quedarán marcados como facturados.`;
+        if(r.advertencias.length){
+            texto += `\n\nAdvertencia: ${r.advertencias.join(' ')}`;
+        }
+        if(!confirm(texto)) return;
+
+        let guardado = await enviarRecibo(datosCobro('generar', {confirmado: true}));
+        if(guardado.msg != 'ok'){
+            alert('Error: ' + guardado.msg);
+            return;
+        }
+        await listarPeriodos();
+        divCargo.innerHTML = `<div class="alert alert-success mt-2 mb-0">Recibo #${Number(guardado.idRecibo)} generado por ${moneda(guardado.total)}.</div>`;
+    }
+    async function listarRecibos(){
+        let response = await fetch(`/recibos?idCliente=${encodeURIComponent(cboEmpresaPeriodo.value)}&idProducto=${encodeURIComponent(cboProductoPeriodo.value)}`),
+            recibos = await response.json();
+        if(!recibos || !recibos.length){
+            divRecibos.innerHTML = '';
+            return;
+        }
+        divRecibos.innerHTML = `
+            <h6>Recibos emitidos</h6>
+            <div class="table-responsive">
+                <table class="table table-sm table-striped">
+                    <thead>
+                        <tr><th>N.º</th><th>Código</th><th>Cobro desde</th><th>Cobro hasta</th><th>Total</th><th>Emitido</th></tr>
+                    </thead>
+                    <tbody>
+                        ${recibos.map(r=>`
+                            <tr>
+                                <td>${Number(r.idRecibo)}</td>
+                                <td>${esc(r.codigo)}</td>
+                                <td>${fecha(r.cobro_desde)}</td>
+                                <td>${fecha(r.cobro_hasta)}</td>
+                                <td>${moneda(r.total)}</td>
+                                <td><small>${esc(r.fecha)}</small></td>
+                            </tr>`).join('')}
+                    </tbody>
+                </table>
+            </div>`;
+    }
+
+    buscarClientes();
+    cargarEmpresas();
+    cargarProductos();
 </script>
 
 </html>

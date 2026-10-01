@@ -5,7 +5,8 @@ db = conexion.Conexion()
 
 class crud_clientes:
     def consultar(self, buscar):
-        return db.consultar(f"SELECT * FROM clientes WHERE nombre LIKE '%{buscar}%'")
+        # Parametrizado: un apostrofe o comilla en el nombre ya no rompe la consulta
+        return db.consultar("SELECT * FROM clientes WHERE nombre LIKE %s ORDER BY nombre", (f"%{buscar}%",))
 
     def administrar(self, datos):
         try:
@@ -21,11 +22,19 @@ class crud_clientes:
                     WHERE idCliente=%s
                 """
                 valores = (datos['codigo'],datos['nombre'],datos['direccion'],datos['telefono'],datos['email'],datos['tipo'],datos['idCliente'])
-            else:
+            elif datos['accion']=='eliminar':
+                # clientes es MyISAM (sin llaves foraneas): se valida aqui para no dejar periodos huerfanos
+                usados = db.consultar("SELECT COUNT(*) AS n FROM periodos WHERE idCliente=%s", (datos['idCliente'],))
+                if usados is None:
+                    return "Error al verificar los períodos del cliente."
+                if usados[0]['n'] > 0:
+                    return "No se puede eliminar: el cliente tiene períodos registrados."
                 sql = """
                     DELETE FROM clientes WHERE idCliente=%s
                 """
                 valores = (datos['idCliente'],)
+            else:
+                return "Acción no válida."
             return db.ejecutar(sql,valores)
         except Error as e:
             return f"Error al guardar el cliente: {e}"

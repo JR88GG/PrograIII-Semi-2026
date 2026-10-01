@@ -24,11 +24,15 @@ class Conexion:
         except Error as e:
             print(f"Error al conectar a la base de datos: {e}")
 
-    def consultar(self, sql):
+    # 'datos' es opcional: crud_clientes sigue llamando consultar(sql)
+    def consultar(self, sql, datos=None):
         try:
             cursor = self.conexion.cursor(dictionary=True)
-            cursor.execute(sql)
-            return cursor.fetchall()
+            cursor.execute(sql, datos)
+            filas = cursor.fetchall()
+            # Cierra la transaccion implicita para ver siempre datos frescos (InnoDB)
+            self.conexion.commit()
+            return filas
         except Error as e:
             print(f"Error al consultar la base de datos: {e}")
             return None
@@ -42,6 +46,20 @@ class Conexion:
         except Error as e:
             print(f"Error al ejecutar la consulta: {e}")
             return f'Error: {e}'
-    
-        
-    
+
+    # Ejecuta varias sentencias [(sql, datos), ...] en UNA transaccion.
+    # Si alguna falla se revierte todo. Devuelve la lista de lastrowid
+    # (uno por sentencia) o un texto 'Error: ...'.
+    def transaccion(self, operaciones):
+        try:
+            cursor = self.conexion.cursor()
+            ids = []
+            for sql, datos in operaciones:
+                cursor.execute(sql, datos)
+                ids.append(cursor.lastrowid)
+            self.conexion.commit()
+            return ids
+        except Error as e:
+            self.conexion.rollback()
+            print(f"Error en la transaccion: {e}")
+            return f'Error: {e}'
